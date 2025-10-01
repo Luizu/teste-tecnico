@@ -1,4 +1,5 @@
 import { Module } from '@nestjs/common';
+import { PrismaService } from '../database/prisma.service';
 import { ProductsRepository } from './interfaces';
 import { ProductController } from './product.controller';
 import { ProductService } from './product.service';
@@ -10,7 +11,10 @@ import { PrismaProductsRepository } from './repositories';
     ProductService,
     {
       provide: ProductsRepository,
-      useClass: PrismaProductsRepository,
+      useFactory: (prisma: PrismaService) => {
+        return new PrismaProductsRepository(prisma);
+      },
+      inject: [PrismaService],
     },
   ],
 })
