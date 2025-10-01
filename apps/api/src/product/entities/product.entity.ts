@@ -1,0 +1,64 @@
+export type ProductProps = {
+  id: string;
+  name: string;
+  description: string;
+  image: string;
+  quantity: number;
+  price: number;
+  createdAt: Date;
+  updatedAt: Date;
+};
+
+export class Product {
+  readonly #id: string;
+  readonly #name: string;
+  readonly #description: string;
+  readonly #image: string;
+  readonly #quantity: number;
+  readonly #price: number;
+  readonly #createdAt: Date;
+  readonly #updatedAt: Date;
+
+  constructor(props: ProductProps) {
+    this.#id = props.id;
+    this.#name = props.name;
+    this.#description = props.description;
+    this.#image = props.image;
+    this.#quantity = props.quantity;
+    this.#price = props.price;
+    this.#createdAt = props.createdAt;
+    this.#updatedAt = props.updatedAt;
+  }
+
+  get id(): string {
+    return this.#id;
+  }
+
+  get name(): string {
+    return this.#name;
+  }
+
+  get description(): string {
+    return this.#description;
+  }
+
+  get image(): string {
+    return this.#image;
+  }
+
+  get quantity(): number {
+    return this.#quantity;
+  }
+
+  get price(): number {
+    return this.#price;
+  }
+
+  get createdAt(): Date {
+    return this.#createdAt;
+  }
+
+  get updatedAt(): Date {
+    return this.#updatedAt;
+  }
+}
