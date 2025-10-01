@@ -3,7 +3,7 @@ export type ProductProps = {
   name: string;
   description: string;
   image: string;
-  quantity: number;
+  stock: number;
   price: number;
   createdAt: Date;
   updatedAt: Date;
@@ -14,7 +14,7 @@ export class Product {
   readonly #name: string;
   readonly #description: string;
   readonly #image: string;
-  readonly #quantity: number;
+  readonly #stock: number;
   readonly #price: number;
   readonly #createdAt: Date;
   readonly #updatedAt: Date;
@@ -24,7 +24,7 @@ export class Product {
     this.#name = props.name;
     this.#description = props.description;
     this.#image = props.image;
-    this.#quantity = props.quantity;
+    this.#stock = props.stock;
     this.#price = props.price;
     this.#createdAt = props.createdAt;
     this.#updatedAt = props.updatedAt;
@@ -46,8 +46,8 @@ export class Product {
     return this.#image;
   }
 
-  get quantity(): number {
-    return this.#quantity;
+  get stock(): number {
+    return this.#stock;
   }
 
   get price(): number {

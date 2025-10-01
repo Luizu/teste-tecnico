@@ -7,7 +7,7 @@ export const productToDto: (product: Product) => ProductDto = (product) => {
     name: product.name,
     description: product.description,
     image: product.image,
-    quantity: product.quantity,
+    stock: product.stock,
     price: product.price,
     createdAt: product.createdAt,
     updatedAt: product.updatedAt,
@@ -36,10 +36,10 @@ export class ProductDto {
   })
   readonly image: string;
   @ApiProperty({
-    description: 'The quantity of the product',
+    description: 'The stock of the product',
     example: 10,
   })
-  readonly quantity: number;
+  readonly stock: number;
   @ApiProperty({
     description: 'The price of the product',
     example: 100.0,
