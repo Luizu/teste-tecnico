@@ -1,6 +1,6 @@
 import { faker } from '@faker-js/faker';
+import { PrismaClient } from '@prisma/client';
 import { createClient } from 'pexels';
-import { PrismaClient } from '../generated/prisma';
 
 const prisma = new PrismaClient();
 
