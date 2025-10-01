@@ -6,7 +6,7 @@
     "dev": {
       "cache": false,
       "persistent": true,
-      "env": ["PORT"]
+      "env": ["PORT", "PEXELS_API_KEY"]
     },
     "build": {
       "dependsOn": ["^build"],
