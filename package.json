@@ -8,6 +8,9 @@
   "scripts": {
     "dev": "turbo run dev",
     "build": "turbo run build",
+    "infra:up": "docker compose -f apps/api/docker-compose.yaml up -d && sleep 3 && cd apps/api && npx prisma migrate dev && yarn seed",
+    "infra:down": "docker compose -f apps/api/docker-compose.yaml down",
+    "infra:reset": "docker compose -f apps/api/docker-compose.yaml down -v && yarn infra:up",
     "test": "turbo run test",
     "test:e2e": "turbo run test:e2e",
     "lint": "turbo run lint",
