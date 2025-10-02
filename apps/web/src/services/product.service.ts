@@ -62,15 +62,12 @@ export class ProductService {
       });
     } catch (error) {
       if (error instanceof ApiError) {
-        // 404 é esperado, retorna null
         if (error.status === 404) {
           return null;
         }
-        // Outros erros de API são re-thrown
         console.error('Failed to fetch product:', error.status, error.data);
         throw error;
       }
-      // Erro desconhecido
       throw new Error('Erro ao buscar produto');
     }
   }
