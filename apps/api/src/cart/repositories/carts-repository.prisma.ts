@@ -51,4 +51,10 @@ export class PrismaCartsRepository implements CartsRepository {
       updatedAt: record.updatedAt,
     });
   }
+
+  async delete(cartId: string): Promise<void> {
+    await this.prisma.cart.delete({
+      where: { id: cartId },
+    });
+  }
 }
