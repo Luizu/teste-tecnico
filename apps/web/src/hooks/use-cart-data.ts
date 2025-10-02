@@ -11,12 +11,15 @@ export function useCartData() {
     const fetchCartCount = async () => {
       try {
         const cartData = await getCart();
-        if (cartData && cartData.items.length > 0) {
+        if (cartData && cartData.items && cartData.items.length > 0) {
           const fullCart = await getCartWithProducts();
           setCart(fullCart);
+        } else {
+          setCart(null);
         }
       } catch (error) {
         console.error('Error fetching cart:', error);
+        setCart(null);
       }
     };
 

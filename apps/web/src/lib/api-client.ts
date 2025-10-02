@@ -66,7 +66,18 @@ class ApiClient {
       );
     }
 
-    return response.json();
+    // Se não houver conteúdo (204 No Content ou body vazio), retorna vazio
+    const contentLength = response.headers.get('content-length');
+    if (contentLength === '0' || response.status === 204) {
+      return {} as T;
+    }
+
+    const text = await response.text();
+    if (!text || text.trim() === '') {
+      return {} as T;
+    }
+
+    return JSON.parse(text);
   }
 
   /**

@@ -82,17 +82,12 @@ export async function addToCart(productId: string): Promise<Cart> {
 export async function removeFromCart(productId: string): Promise<void> {
   const sessionId = await getOrCreateSessionId();
 
-  try {
-    await apiClient.post('/cart/remove', {
-      sessionId,
-      productId,
-    });
+  await apiClient.post('/cart/remove', {
+    sessionId,
+    productId,
+  });
 
-    revalidatePath('/', 'layout');
-  } catch (error) {
-    console.error('Error removing from cart:', error);
-    throw new Error('Erro ao remover produto do carrinho');
-  }
+  revalidatePath('/', 'layout');
 }
 
 /**
@@ -105,6 +100,10 @@ export async function getCart(): Promise<Cart | null> {
     const cart = await apiClient.get<Cart>('/cart', {
       params: { sessionId },
     });
+
+    if (!cart || !cart.items) {
+      return null;
+    }
 
     return cart;
   } catch (error) {
@@ -125,7 +124,7 @@ export async function getCartWithProducts(): Promise<CartWithProducts | null> {
       params: { sessionId },
     });
 
-    if (!cart || cart.items.length === 0) {
+    if (!cart || !cart.items || cart.items.length === 0) {
       return null;
     }
 

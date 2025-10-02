@@ -2,6 +2,7 @@
 
 import { useCart } from '@/contexts/cart-context';
 import {
+  addToCart,
   CartWithProducts,
   getCartWithProducts,
   removeFromCart,
@@ -28,39 +29,55 @@ export function useCartActions() {
   };
 
   const updateQuantity = async (productId: string, newQuantity: number) => {
-    if (newQuantity < 1) return;
+    if (!cart) return;
 
-    if (cart) {
-      const updatedItems = cart.items.map((item) =>
+    const currentItem = cart.items.find((item) => item.productId === productId);
+    if (!currentItem) return;
+
+    const currentQuantity = currentItem.quantity;
+
+    // Optimistic update - se a quantidade for 0, remove o item do array
+    let updatedItems;
+    if (newQuantity <= 0) {
+      updatedItems = cart.items.filter((item) => item.productId !== productId);
+    } else {
+      updatedItems = cart.items.map((item) =>
         item.productId === productId
           ? { ...item, quantity: newQuantity }
           : item,
       );
-      setCart({ ...cart, items: updatedItems } as CartWithProducts);
     }
+    setCart({ ...cart, items: updatedItems } as CartWithProducts);
 
     try {
-      // TODO: Implementar API de update quantity
-      await new Promise((resolve) => setTimeout(resolve, 300));
+      if (newQuantity > currentQuantity) {
+        await addToCart(productId);
+      } else if (newQuantity < currentQuantity) {
+        await removeFromCart(productId);
+      }
+
+      // Busca carrinho atualizado - pode retornar null se estiver vazio
       const updatedCart = await getCartWithProducts();
       setCart(updatedCart);
     } catch (error) {
       console.error('Error updating quantity:', error);
-      toast.error('Erro ao atualizar quantidade');
-      const revertedCart = await getCartWithProducts();
-      setCart(revertedCart);
-    }
-  };
 
-  const removeItem = async (productId: string) => {
-    try {
-      await removeFromCart(productId);
-      toast.success('Produto removido do carrinho');
-      const updatedCart = await getCartWithProducts();
-      setCart(updatedCart);
-    } catch (error) {
-      console.error('Error removing item:', error);
-      toast.error('Erro ao remover produto');
+      if (error instanceof Error && error.message.includes('remover produto')) {
+        try {
+          const updatedCart = await getCartWithProducts();
+          setCart(updatedCart);
+        } catch {
+          setCart(null);
+        }
+      } else {
+        toast.error('Erro ao atualizar quantidade');
+        try {
+          const revertedCart = await getCartWithProducts();
+          setCart(revertedCart);
+        } catch {
+          setCart(null);
+        }
+      }
     }
   };
 
@@ -70,6 +87,5 @@ export function useCartActions() {
     openCart,
     closeCart,
     updateQuantity,
-    removeItem,
   };
 }
