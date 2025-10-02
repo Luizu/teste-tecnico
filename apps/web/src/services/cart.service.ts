@@ -4,6 +4,15 @@ import { apiClient } from '@/lib/api-client';
 import { getOrCreateSessionId } from '@/lib/session';
 import { revalidatePath } from 'next/cache';
 
+export interface Product {
+  id: string;
+  name: string;
+  description: string;
+  price: number;
+  image: string;
+  stock: number;
+}
+
 export interface CartItem {
   id: string;
   productId: string;
@@ -14,6 +23,36 @@ export interface Cart {
   id: string;
   sessionId: string;
   items: CartItem[];
+}
+
+export interface CartItemWithProduct extends CartItem {
+  product: Product;
+}
+
+export interface CartWithProducts {
+  id: string;
+  sessionId: string;
+  items: CartItemWithProduct[];
+}
+/**
+ * Normaliza os dados do carrinho vindos da API
+ * Converte strings numéricas para números
+ */
+function normalizeCartData(cart: CartWithProducts): CartWithProducts {
+  return {
+    ...cart,
+    items: cart.items.map((item) => ({
+      ...item,
+      quantity: Number(item.quantity),
+      product: item.product
+        ? {
+            ...item.product,
+            price: Number(item.product.price),
+            stock: Number(item.product.stock),
+          }
+        : undefined,
+    })) as CartItemWithProduct[],
+  };
 }
 
 /**
@@ -70,6 +109,29 @@ export async function getCart(): Promise<Cart | null> {
     return cart;
   } catch (error) {
     console.error('Error getting cart:', error);
+    return null;
+  }
+}
+
+/**
+ * Obtém o carrinho atual com dados completos dos produtos
+ * O backend já retorna os produtos junto com os itens do carrinho
+ */
+export async function getCartWithProducts(): Promise<CartWithProducts | null> {
+  const sessionId = await getOrCreateSessionId();
+
+  try {
+    const cart = await apiClient.get<CartWithProducts>('/cart', {
+      params: { sessionId },
+    });
+
+    if (!cart || cart.items.length === 0) {
+      return null;
+    }
+
+    return normalizeCartData(cart);
+  } catch (error) {
+    console.error('Error getting cart with products:', error);
     return null;
   }
 }
