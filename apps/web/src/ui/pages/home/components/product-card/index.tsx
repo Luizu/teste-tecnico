@@ -1,7 +1,7 @@
 'use client';
 
-import { useCart } from '@/contexts/cart-context';
 import { addToCart, getCartWithProducts } from '@/actions/cart.actions';
+import { useCart } from '@/contexts/cart-context';
 import { Product } from '@/types/product';
 import { Button } from '@/ui/components/button';
 import { Card } from '@/ui/components/card';
@@ -61,7 +61,7 @@ export const ProductCard = ({ product }: ProductCardProps) => {
           </h3>
         </Link>
 
-        <div className="flex flex-col gap-2">
+        <div className="flex flex-col gap-2 min-h-[6rem]">
           {product.promotionalPrice ? (
             <>
               <div className="flex items-center gap-2 flex-wrap">
@@ -82,9 +82,12 @@ export const ProductCard = ({ product }: ProductCardProps) => {
               </span>
             </>
           ) : (
-            <span className="text-3xl font-bold text-gray-900">
-              R$ {product.price.toFixed(2).replace('.', ',')}
-            </span>
+            <div className="flex flex-col gap-2">
+              <div className="h-8"></div>
+              <span className="text-3xl font-bold text-gray-900">
+                R$ {product.price.toFixed(2).replace('.', ',')}
+              </span>
+            </div>
           )}
         </div>
 
