@@ -47,10 +47,10 @@ export function CartDrawer({
   if (!isOpen) return null;
 
   const subtotal =
-    cart?.items.reduce(
-      (acc, item) => acc + item.product.price * item.quantity,
-      0,
-    ) || 0;
+    cart?.items.reduce((acc, item) => {
+      const price = item.product.promotionalPrice || item.product.price;
+      return acc + price * item.quantity;
+    }, 0) || 0;
 
   return (
     <>

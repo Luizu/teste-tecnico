@@ -61,10 +61,31 @@ export const ProductCard = ({ product }: ProductCardProps) => {
           </h3>
         </Link>
 
-        <div className="flex flex-col gap-1">
-          <span className="text-3xl font-bold text-gray-900">
-            R$ {product.price.toFixed(2).replace('.', ',')}
-          </span>
+        <div className="flex flex-col gap-2">
+          {product.promotionalPrice ? (
+            <>
+              <div className="flex items-center gap-2 flex-wrap">
+                <span className="text-lg text-gray-500 line-through">
+                  R$ {product.price.toFixed(2).replace('.', ',')}
+                </span>
+                <span className="inline-flex items-center px-2 py-1 rounded-full text-xs font-semibold bg-green-100 text-green-800">
+                  {Math.round(
+                    ((product.price - product.promotionalPrice) /
+                      product.price) *
+                      100,
+                  )}
+                  % OFF
+                </span>
+              </div>
+              <span className="text-3xl font-bold text-green-600">
+                R$ {product.promotionalPrice.toFixed(2).replace('.', ',')}
+              </span>
+            </>
+          ) : (
+            <span className="text-3xl font-bold text-gray-900">
+              R$ {product.price.toFixed(2).replace('.', ',')}
+            </span>
+          )}
         </div>
 
         <Button

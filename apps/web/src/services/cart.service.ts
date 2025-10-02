@@ -48,6 +48,9 @@ function normalizeCartData(cart: CartWithProducts): CartWithProducts {
         ? {
             ...item.product,
             price: Number(item.product.price),
+            promotionalPrice: item.product.promotionalPrice
+              ? Number(item.product.promotionalPrice)
+              : undefined,
             stock: Number(item.product.stock),
           }
         : undefined,

@@ -5,4 +5,5 @@ export type Product = {
   image: string;
   stock: number;
   price: number;
+  promotionalPrice?: number;
 };

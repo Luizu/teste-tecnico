@@ -19,6 +19,7 @@ export function CartItemsList({ cart, onUpdateQuantity }: CartItemsListProps) {
           name={item.product.name}
           image={item.product.image}
           price={item.product.price}
+          promotionalPrice={item.product.promotionalPrice}
           quantity={item.quantity}
           onUpdateQuantity={onUpdateQuantity}
         />

@@ -9,6 +9,13 @@ export const ProductInfo = ({ product }: ProductInfoProps) => {
     return price.toFixed(2).replace('.', ',');
   };
 
+  const calculateDiscount = () => {
+    if (!product.promotionalPrice) return 0;
+    return Math.round(
+      ((product.price - product.promotionalPrice) / product.price) * 100,
+    );
+  };
+
   const getStockMessage = (stock: number) => {
     if (stock === 0) {
       return { text: 'Produto esgotado', color: 'text-red-600' };
@@ -40,10 +47,26 @@ export const ProductInfo = ({ product }: ProductInfoProps) => {
           {product.name}
         </h1>
 
-        <div className="flex items-baseline gap-3">
-          <span className="text-4xl font-bold text-gray-900">
-            R$ {formatPrice(product.price)}
-          </span>
+        <div className="flex items-center gap-3 flex-wrap">
+          {product.promotionalPrice ? (
+            <>
+              <div className="flex items-baseline gap-3">
+                <span className="text-2xl text-gray-500 line-through">
+                  R$ {formatPrice(product.price)}
+                </span>
+                <span className="text-4xl font-bold text-green-600">
+                  R$ {formatPrice(product.promotionalPrice)}
+                </span>
+              </div>
+              <span className="inline-flex items-center px-3 py-1 rounded-full text-sm font-semibold bg-green-100 text-green-800">
+                {calculateDiscount()}% OFF
+              </span>
+            </>
+          ) : (
+            <span className="text-4xl font-bold text-gray-900">
+              R$ {formatPrice(product.price)}
+            </span>
+          )}
         </div>
       </div>
 
