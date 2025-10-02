@@ -44,7 +44,7 @@ async function main() {
         name: product,
         description: faker.commerce.productDescription(),
         image: imageUrl,
-        quantity: faker.number.int({ min: 0, max: 100 }),
+        stock: faker.number.int({ min: 0, max: 100 }),
         price: faker.commerce.price({ min: 10, max: 5000, dec: 2 }),
       };
     }),
