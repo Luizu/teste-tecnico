@@ -9,6 +9,7 @@ export const productToDto: (product: Product) => ProductDto = (product) => {
     image: product.image,
     stock: product.stock,
     price: product.price,
+    promotionalPrice: product.promotionalPrice,
     createdAt: product.createdAt,
     updatedAt: product.updatedAt,
   };
@@ -45,6 +46,12 @@ export class ProductDto {
     example: 100.0,
   })
   readonly price: number;
+  @ApiProperty({
+    description: 'The promotional price of the product (optional)',
+    example: 80.0,
+    required: false,
+  })
+  readonly promotionalPrice?: number;
   @ApiProperty({
     description: 'The created at date of the product',
     example: '2025-10-01',

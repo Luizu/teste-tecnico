@@ -5,6 +5,7 @@ export type ProductProps = {
   image: string;
   stock: number;
   price: number;
+  promotionalPrice?: number;
   createdAt: Date;
   updatedAt: Date;
 };
@@ -16,6 +17,7 @@ export class Product {
   readonly #image: string;
   readonly #stock: number;
   readonly #price: number;
+  readonly #promotionalPrice?: number;
   readonly #createdAt: Date;
   readonly #updatedAt: Date;
 
@@ -26,6 +28,7 @@ export class Product {
     this.#image = props.image;
     this.#stock = props.stock;
     this.#price = props.price;
+    this.#promotionalPrice = props.promotionalPrice;
     this.#createdAt = props.createdAt;
     this.#updatedAt = props.updatedAt;
   }
@@ -52,6 +55,10 @@ export class Product {
 
   get price(): number {
     return this.#price;
+  }
+
+  get promotionalPrice(): number | undefined {
+    return this.#promotionalPrice;
   }
 
   get createdAt(): Date {

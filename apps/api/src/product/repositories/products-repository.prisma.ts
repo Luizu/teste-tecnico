@@ -17,6 +17,7 @@ export class PrismaProductsRepository implements ProductsRepository {
           image: record.image,
           stock: record.stock,
           price: record.price.toNumber(),
+          promotionalPrice: record.promotionalPrice?.toNumber(),
           createdAt: record.createdAt,
           updatedAt: record.updatedAt,
         }),
@@ -37,6 +38,7 @@ export class PrismaProductsRepository implements ProductsRepository {
       image: record.image,
       stock: record.stock,
       price: record.price.toNumber(),
+      promotionalPrice: record.promotionalPrice?.toNumber(),
       createdAt: record.createdAt,
       updatedAt: record.updatedAt,
     });

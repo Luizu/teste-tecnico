@@ -60,6 +60,7 @@ export const cartItemToDto = (cartItem: CartItem): CartItemDto => {
           image: cartItem.product.image,
           stock: cartItem.product.stock,
           price: cartItem.product.price,
+          promotionalPrice: cartItem.product.promotionalPrice,
           createdAt: cartItem.product.createdAt,
           updatedAt: cartItem.product.updatedAt,
         }

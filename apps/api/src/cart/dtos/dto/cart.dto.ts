@@ -51,7 +51,8 @@ export const cartToDto = (cart: Cart): CartDto => {
 
   const totalItems = items.reduce((sum, item) => sum + item.quantity, 0);
   const totalPrice = items.reduce((sum, item) => {
-    const itemPrice = item.product?.price ?? 0;
+    const itemPrice =
+      item.product?.promotionalPrice ?? item.product?.price ?? 0;
     return sum + itemPrice * item.quantity;
   }, 0);
 
