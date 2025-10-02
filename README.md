@@ -149,9 +149,9 @@ yarn dev
 
 Isso iniciará:
 
-- **Frontend**: http://localhost:3001
-- **Backend**: http://localhost:8080
-- **Swagger**: http://localhost:8080/api
+- Frontend: http://localhost:3001
+- Backend: http://localhost:8080/api
+- Swagger: http://localhost:8080/api/docs
 
 ## 📚 Scripts Disponíveis
 
