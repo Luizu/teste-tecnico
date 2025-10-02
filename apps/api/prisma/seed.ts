@@ -58,7 +58,7 @@ const products = [
       'https://images.unsplash.com/photo-1517336714731-489689fd1ca8?w=800&q=80',
     price: Prisma.Decimal(2499.9),
     promotionalPrice: Prisma.Decimal(2199.9),
-    stock: 3,
+    stock: 0,
   },
   {
     name: 'iPhone 15 Pro',

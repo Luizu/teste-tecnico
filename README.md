@@ -73,11 +73,12 @@ Antes de começar, certifique-se de ter instalado:
 ```bash
 # 1. Clone e instale
 git clone <url-do-repositorio>
-cd teste-tecnico
+cd teste-tecnico (ou o nome do caminho que você escolheu)
+
 yarn install
 
 # 2. Configure o .env
-echo 'DATABASE_URL="postgresql://postgres:postgres@localhost:5432/ecommerce?schema=public"' > apps/api/.env
+echo 'DATABASE_URL="postgresql://postgres:postgres@localhost:5432/api-db?schema=public"' > apps/api/.env
 
 # 3. Suba infraestrutura (banco + migrations)
 yarn infra:up
@@ -114,7 +115,7 @@ yarn install
 Crie um arquivo `.env` em `apps/api/`:
 
 ```env
-DATABASE_URL="postgresql://postgres:postgres@localhost:5432/ecommerce?schema=public"
+DATABASE_URL="postgresql://postgres:postgres@localhost:5432/api-db?schema=public"
 ```
 
 ### 4. Inicie a infraestrutura (banco de dados + migrations)

@@ -35,7 +35,11 @@ export const ProductCard = ({ product }: ProductCardProps) => {
       setCart(updatedCart);
     } catch (error) {
       console.error('Erro ao adicionar ao carrinho:', error);
-      toast.error('Erro ao adicionar produto ao carrinho');
+      const errorMessage =
+        error instanceof Error
+          ? error.message
+          : 'Erro ao adicionar produto ao carrinho';
+      toast.error(errorMessage);
     } finally {
       setIsLoading(false);
     }

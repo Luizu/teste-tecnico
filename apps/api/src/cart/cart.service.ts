@@ -1,6 +1,12 @@
 import { Injectable } from '@nestjs/common';
+import { ProductNotFoundException } from '../product/exceptions';
+import { ProductsRepository } from '../product/interfaces';
 import { CartDto, cartToDto } from './dtos';
-import { CartNotFoundException, ProductNotInCartException } from './exceptions';
+import {
+  CartNotFoundException,
+  ProductNotInCartException,
+  ProductOutOfStockException,
+} from './exceptions';
 import { CartItemsRepository, CartsRepository } from './interfaces';
 import { CartCriteria, CartItemCriteria } from './repositories';
 
@@ -9,9 +15,20 @@ export class CartService {
   constructor(
     private readonly cartsRepository: CartsRepository,
     private readonly cartItemsRepository: CartItemsRepository,
+    private readonly productsRepository: ProductsRepository,
   ) {}
 
   async addProduct(sessionId: string, productId: string): Promise<CartDto> {
+    const product = await this.productsRepository.findById(productId);
+
+    if (!product) {
+      throw new ProductNotFoundException(productId);
+    }
+
+    if (product.stock <= 0) {
+      throw new ProductOutOfStockException(productId);
+    }
+
     const existingCart = await this.cartsRepository.findBy(
       new CartCriteria({
         where: { sessionId },

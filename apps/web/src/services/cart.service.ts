@@ -3,7 +3,7 @@
  * Separa a lógica de negócio da camada de transporte (HTTP)
  */
 
-import { apiClient } from '@/lib/api-client';
+import { apiClient, ApiError } from '@/lib/api-client';
 import { getOrCreateSessionId } from '@/lib/session';
 import { revalidatePath } from 'next/cache';
 
@@ -88,6 +88,11 @@ export class CartService {
       return cart;
     } catch (error) {
       console.error('Error adding to cart:', error);
+
+      if (error instanceof ApiError && error.status === 400) {
+        throw new Error('Produto esgotado ou não disponível');
+      }
+
       throw new Error('Erro ao adicionar produto ao carrinho');
     }
   }

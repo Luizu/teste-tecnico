@@ -1,11 +1,13 @@
 import { Module } from '@nestjs/common';
 import { PrismaService } from '../database/prisma.service';
-import { CartsRepository, CartItemsRepository } from './interfaces';
+import { ProductsRepository } from '../product/interfaces';
+import { PrismaProductsRepository } from '../product/repositories';
 import { CartController } from './cart.controller';
 import { CartService } from './cart.service';
+import { CartItemsRepository, CartsRepository } from './interfaces';
 import {
-  PrismaCartsRepository,
   PrismaCartItemsRepository,
+  PrismaCartsRepository,
 } from './repositories';
 
 @Module({
@@ -23,6 +25,13 @@ import {
       provide: CartItemsRepository,
       useFactory: (prisma: PrismaService) => {
         return new PrismaCartItemsRepository(prisma);
+      },
+      inject: [PrismaService],
+    },
+    {
+      provide: ProductsRepository,
+      useFactory: (prisma: PrismaService) => {
+        return new PrismaProductsRepository(prisma);
       },
       inject: [PrismaService],
     },

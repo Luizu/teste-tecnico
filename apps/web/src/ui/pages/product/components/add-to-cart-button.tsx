@@ -1,7 +1,7 @@
 'use client';
 
-import { useCart } from '@/contexts/cart-context';
 import { addToCart, getCartWithProducts } from '@/actions/cart.actions';
+import { useCart } from '@/contexts/cart-context';
 import { Button } from '@/ui/components/button';
 import { ShoppingCart } from 'lucide-react';
 import { useState } from 'react';
@@ -34,7 +34,11 @@ export const AddToCartButton = ({
       setCart(updatedCart);
     } catch (error) {
       console.error('Erro ao adicionar ao carrinho:', error);
-      toast.error('Erro ao adicionar produto ao carrinho');
+      const errorMessage =
+        error instanceof Error
+          ? error.message
+          : 'Erro ao adicionar produto ao carrinho';
+      toast.error(errorMessage);
     } finally {
       setIsLoading(false);
     }
