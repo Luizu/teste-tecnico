@@ -1,8 +1,10 @@
 'use client';
 
+import { addToCart } from '@/services/cart.service';
 import { Button } from '@/ui/components/button';
 import { ShoppingCart } from 'lucide-react';
 import { useState } from 'react';
+import { toast } from 'sonner';
 
 interface AddToCartButtonProps {
   productId: string;
@@ -20,10 +22,13 @@ export const AddToCartButton = ({
   const handleAddToCart = async () => {
     setIsLoading(true);
     try {
-      console.log('Adding to cart:', { productId, productName });
-      await new Promise((resolve) => setTimeout(resolve, 500));
+      await addToCart(productId);
+      toast.success('Produto adicionado ao carrinho!', {
+        description: productName,
+      });
     } catch (error) {
-      console.error('Error adding to cart:', error);
+      console.error('Erro ao adicionar ao carrinho:', error);
+      toast.error('Erro ao adicionar produto ao carrinho');
     } finally {
       setIsLoading(false);
     }
@@ -36,7 +41,11 @@ export const AddToCartButton = ({
       className="w-full h-14 text-lg font-semibold bg-green-600 hover:bg-green-700 text-white rounded-lg disabled:bg-gray-300 disabled:text-gray-500 disabled:cursor-not-allowed transition-colors"
     >
       <ShoppingCart className="mr-2 h-6 w-6" />
-      {isOutOfStock ? 'Produto Esgotado' : 'Adicionar ao Carrinho'}
+      {isLoading
+        ? 'Adicionando...'
+        : isOutOfStock
+          ? 'Produto Esgotado'
+          : 'Adicionar ao Carrinho'}
     </Button>
   );
 };

@@ -1,17 +1,40 @@
 'use client';
 
+import { addToCart } from '@/services/cart.service';
 import { Product } from '@/types/product';
 import { Button } from '@/ui/components/button';
 import { Card } from '@/ui/components/card';
 import { ShoppingCart } from 'lucide-react';
 import Image from 'next/image';
 import Link from 'next/link';
+import { useState } from 'react';
+import { toast } from 'sonner';
 
 interface ProductCardProps {
   product: Product;
 }
 
 export const ProductCard = ({ product }: ProductCardProps) => {
+  const [isLoading, setIsLoading] = useState(false);
+
+  const handleAddToCart = async (e: React.MouseEvent) => {
+    e.preventDefault();
+    e.stopPropagation();
+
+    setIsLoading(true);
+    try {
+      await addToCart(product.id);
+      toast.success('Produto adicionado ao carrinho!', {
+        description: product.name,
+      });
+    } catch (error) {
+      console.error('Erro ao adicionar ao carrinho:', error);
+      toast.error('Erro ao adicionar produto ao carrinho');
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
   return (
     <Card className="overflow-hidden group hover:shadow-xl transition-all duration-300">
       <Link href={`/product/${product.id}`} className="block relative">
@@ -39,11 +62,16 @@ export const ProductCard = ({ product }: ProductCardProps) => {
         </div>
 
         <Button
-          className="w-full h-12 text-base font-semibold bg-green-600 hover:bg-green-700 text-white rounded-lg"
-          disabled={product.quantity === 0}
+          onClick={handleAddToCart}
+          className="w-full h-12 text-base font-semibold bg-green-600 hover:bg-green-700 text-white rounded-lg disabled:bg-gray-300 disabled:text-gray-500 disabled:cursor-not-allowed"
+          disabled={product.stock === 0 || isLoading}
         >
           <ShoppingCart className="mr-2 h-5 w-5" />
-          {product.quantity > 0 ? 'Adicionar' : 'Esgotado'}
+          {isLoading
+            ? 'Adicionando...'
+            : product.stock > 0
+              ? 'Adicionar'
+              : 'Esgotado'}
         </Button>
       </div>
     </Card>
