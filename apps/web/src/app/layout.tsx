@@ -1,3 +1,4 @@
+import { CartProvider } from '@/contexts/cart-context';
 import { Header } from '@/ui/components/header';
 import type { Metadata } from 'next';
 import { Toaster } from 'sonner';
@@ -16,9 +17,11 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body>
-        <Header />
-        {children}
-        <Toaster position="top-right" richColors />
+        <CartProvider>
+          <Header />
+          {children}
+          <Toaster position="top-right" richColors />
+        </CartProvider>
       </body>
     </html>
   );
