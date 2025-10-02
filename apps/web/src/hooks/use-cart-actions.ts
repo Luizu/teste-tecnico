@@ -1,12 +1,12 @@
 'use client';
 
 import { useCart } from '@/contexts/cart-context';
+import { CartWithProducts } from '@/services/cart.service';
 import {
   addToCart,
-  CartWithProducts,
   getCartWithProducts,
   removeFromCart,
-} from '@/services/cart.service';
+} from '@/actions/cart.actions';
 import { useState } from 'react';
 import { toast } from 'sonner';
 

@@ -18,7 +18,7 @@ interface CacheOptions {
  * Service para gerenciar produtos
  */
 export class ProductService {
-  private readonly endpoint = '/product';
+  private readonly endpoint = 'products';
 
   /**
    * Busca todos os produtos

@@ -1,4 +1,7 @@
-'use server';
+/**
+ * Cart Service - Camada de serviço para operações de carrinho
+ * Separa a lógica de negócio da camada de transporte (HTTP)
+ */
 
 import { apiClient } from '@/lib/api-client';
 import { getOrCreateSessionId } from '@/lib/session';
@@ -9,6 +12,7 @@ export interface Product {
   name: string;
   description: string;
   price: number;
+  promotionalPrice?: number;
   image: string;
   stock: number;
 }
@@ -34,106 +38,124 @@ export interface CartWithProducts {
   sessionId: string;
   items: CartItemWithProduct[];
 }
-/**
- * Normaliza os dados do carrinho vindos da API
- * Converte strings numéricas para números
- */
-function normalizeCartData(cart: CartWithProducts): CartWithProducts {
-  return {
-    ...cart,
-    items: cart.items.map((item) => ({
-      ...item,
-      quantity: Number(item.quantity),
-      product: item.product
-        ? {
-            ...item.product,
-            price: Number(item.product.price),
-            promotionalPrice: item.product.promotionalPrice
-              ? Number(item.product.promotionalPrice)
-              : undefined,
-            stock: Number(item.product.stock),
-          }
-        : undefined,
-    })) as CartItemWithProduct[],
-  };
-}
 
 /**
- * Adiciona um produto ao carrinho
+ * Service para gerenciar carrinho de compras
  */
-export async function addToCart(productId: string): Promise<Cart> {
-  const sessionId = await getOrCreateSessionId();
+export class CartService {
+  private readonly endpoint = 'cart';
 
-  try {
-    const cart = await apiClient.post<Cart>('/cart/add', {
+  /**
+   * Normaliza os dados do carrinho vindos da API
+   * Converte strings numéricas para números
+   */
+  private normalizeCartData(cart: CartWithProducts): CartWithProducts {
+    return {
+      ...cart,
+      items: cart.items.map((item) => ({
+        ...item,
+        quantity: Number(item.quantity),
+        product: item.product
+          ? {
+              ...item.product,
+              price: Number(item.product.price),
+              promotionalPrice: item.product.promotionalPrice
+                ? Number(item.product.promotionalPrice)
+                : undefined,
+              stock: Number(item.product.stock),
+            }
+          : undefined,
+      })) as CartItemWithProduct[],
+    };
+  }
+
+  /**
+   * Adiciona um produto ao carrinho
+   * @param productId - ID do produto a ser adicionado
+   * @throws Error quando a requisição falha
+   */
+  async addToCart(productId: string): Promise<Cart> {
+    const sessionId = await getOrCreateSessionId();
+
+    try {
+      const cart = await apiClient.post<Cart>(`${this.endpoint}/add`, {
+        sessionId,
+        productId,
+      });
+
+      revalidatePath('/', 'layout');
+
+      return cart;
+    } catch (error) {
+      console.error('Error adding to cart:', error);
+      throw new Error('Erro ao adicionar produto ao carrinho');
+    }
+  }
+
+  /**
+   * Remove um produto do carrinho
+   * @param productId - ID do produto a ser removido
+   */
+  async removeFromCart(productId: string): Promise<void> {
+    const sessionId = await getOrCreateSessionId();
+
+    await apiClient.post(`${this.endpoint}/remove`, {
       sessionId,
       productId,
     });
 
     revalidatePath('/', 'layout');
-
-    return cart;
-  } catch (error) {
-    console.error('Error adding to cart:', error);
-    throw new Error('Erro ao adicionar produto ao carrinho');
   }
-}
 
-/**
- * Remove um produto do carrinho
- */
-export async function removeFromCart(productId: string): Promise<void> {
-  const sessionId = await getOrCreateSessionId();
+  /**
+   * Obtém o carrinho atual
+   * @returns Cart ou null se não encontrado
+   */
+  async getCart(): Promise<Cart | null> {
+    const sessionId = await getOrCreateSessionId();
 
-  await apiClient.post('/cart/remove', {
-    sessionId,
-    productId,
-  });
+    try {
+      const cart = await apiClient.get<Cart>(this.endpoint, {
+        params: { sessionId },
+      });
 
-  revalidatePath('/', 'layout');
-}
+      if (!cart || !cart.items) {
+        return null;
+      }
 
-/**
- * Obtém o carrinho atual
- */
-export async function getCart(): Promise<Cart | null> {
-  const sessionId = await getOrCreateSessionId();
-
-  try {
-    const cart = await apiClient.get<Cart>('/cart', {
-      params: { sessionId },
-    });
-
-    if (!cart || !cart.items) {
+      return cart;
+    } catch (error) {
+      console.error('Error getting cart:', error);
       return null;
     }
+  }
 
-    return cart;
-  } catch (error) {
-    console.error('Error getting cart:', error);
-    return null;
+  /**
+   * Obtém o carrinho atual com dados completos dos produtos
+   * O backend já retorna os produtos junto com os itens do carrinho
+   * @returns CartWithProducts ou null se não encontrado
+   */
+  async getCartWithProducts(): Promise<CartWithProducts | null> {
+    const sessionId = await getOrCreateSessionId();
+
+    try {
+      const cart = await apiClient.get<CartWithProducts>(this.endpoint, {
+        params: { sessionId },
+      });
+
+      if (!cart || !cart.items || cart.items.length === 0) {
+        return null;
+      }
+
+      return this.normalizeCartData(cart);
+    } catch (error) {
+      console.error('Error getting cart with products:', error);
+      return null;
+    }
   }
 }
 
 /**
- * Obtém o carrinho atual com dados completos dos produtos
- * O backend já retorna os produtos junto com os itens do carrinho
+ * Instância singleton do CartService
  */
-export async function getCartWithProducts(): Promise<CartWithProducts | null> {
-  const sessionId = await getOrCreateSessionId();
-
-  try {
-    const cart = await apiClient.get<CartWithProducts>('/cart', {
-      params: { sessionId },
-    });
-
-    if (!cart || !cart.items || cart.items.length === 0) {
-      return null;
-    }
-
-    return normalizeCartData(cart);
-  } catch (error) {
-    console.error('Error getting cart with products:', error);
-    return null;
-  }
-}
+export const cartService = new CartService();

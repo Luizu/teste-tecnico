@@ -15,6 +15,7 @@ interface RequestConfig extends RequestInit {
 class ApiClient {
   private baseURL: string;
   private defaultHeaders: HeadersInit;
+  private prefix: string = 'api';
 
   constructor(config: ApiClientConfig) {
     this.baseURL = config.baseURL;
@@ -28,7 +29,9 @@ class ApiClient {
    * Método privado para construir URL com query params
    */
   private buildURL(endpoint: string, params?: Record<string, string>): string {
-    const url = new URL(endpoint, this.baseURL);
+    console.log(this.baseURL);
+
+    const url = new URL(`${this.prefix}/${endpoint}`, this.baseURL);
 
     if (params) {
       Object.entries(params).forEach(([key, value]) => {
@@ -49,6 +52,7 @@ class ApiClient {
     const { params, headers, ...restConfig } = config || {};
 
     const url = this.buildURL(endpoint, params);
+    console.log('[API Client] Request URL:', url);
 
     const response = await fetch(url, {
       ...restConfig,
@@ -175,5 +179,5 @@ export class ApiError extends Error {
  * Instância singleton do API Client
  */
 export const apiClient = new ApiClient({
-  baseURL: process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8080',
+  baseURL: 'http://localhost:8080/',
 });

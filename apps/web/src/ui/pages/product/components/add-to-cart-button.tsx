@@ -1,7 +1,7 @@
 'use client';
 
 import { useCart } from '@/contexts/cart-context';
-import { addToCart, getCartWithProducts } from '@/services/cart.service';
+import { addToCart, getCartWithProducts } from '@/actions/cart.actions';
 import { Button } from '@/ui/components/button';
 import { ShoppingCart } from 'lucide-react';
 import { useState } from 'react';

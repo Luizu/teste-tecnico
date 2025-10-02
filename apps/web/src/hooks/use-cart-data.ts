@@ -1,7 +1,7 @@
 'use client';
 
 import { useCart } from '@/contexts/cart-context';
-import { getCart, getCartWithProducts } from '@/services/cart.service';
+import { getCart, getCartWithProducts } from '@/actions/cart.actions';
 import { useEffect } from 'react';
 
 export function useCartData() {

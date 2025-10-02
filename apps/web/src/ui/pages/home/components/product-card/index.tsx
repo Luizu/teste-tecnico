@@ -1,7 +1,7 @@
 'use client';
 
 import { useCart } from '@/contexts/cart-context';
-import { addToCart, getCartWithProducts } from '@/services/cart.service';
+import { addToCart, getCartWithProducts } from '@/actions/cart.actions';
 import { Product } from '@/types/product';
 import { Button } from '@/ui/components/button';
 import { Card } from '@/ui/components/card';
