@@ -67,7 +67,10 @@ export class CartService {
     return cartToDto(createdCart);
   }
 
-  async removeProduct(sessionId: string, productId: string): Promise<CartDto> {
+  async removeProduct(
+    sessionId: string,
+    productId: string,
+  ): Promise<CartDto | null> {
     const cart = await this.cartsRepository.findBy(
       new CartCriteria({
         where: { sessionId },
@@ -124,6 +127,11 @@ export class CartService {
         relations: { items: { include: { product: true } } },
       }),
     );
+
+    //Se o carrinho foi removido, retorna null
+    if (!updatedCart) {
+      return null;
+    }
 
     return cartToDto(updatedCart);
   }

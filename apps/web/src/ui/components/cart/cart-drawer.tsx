@@ -13,7 +13,6 @@ interface CartDrawerProps {
   onClose: () => void;
   cart: CartWithProducts | null;
   onUpdateQuantity: (productId: string, newQuantity: number) => void;
-  onRemoveItem: (productId: string) => void;
 }
 
 export function CartDrawer({
@@ -21,7 +20,6 @@ export function CartDrawer({
   onClose,
   cart,
   onUpdateQuantity,
-  onRemoveItem,
 }: CartDrawerProps) {
   const drawerRef = useRef<HTMLDivElement>(null);
 
@@ -70,11 +68,7 @@ export function CartDrawer({
         />
 
         <div className="flex-1 overflow-y-auto">
-          <CartDrawerContent
-            cart={cart}
-            onUpdateQuantity={onUpdateQuantity}
-            onRemoveItem={onRemoveItem}
-          />
+          <CartDrawerContent cart={cart} onUpdateQuantity={onUpdateQuantity} />
         </div>
 
         {cart && cart.items.length > 0 && <CartSummary subtotal={subtotal} />}

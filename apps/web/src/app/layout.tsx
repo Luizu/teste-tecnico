@@ -20,7 +20,7 @@ export default function RootLayout({
         <CartProvider>
           <Header />
           {children}
-          <Toaster position="top-right" richColors />
+          <Toaster position="top-right" richColors duration={1000} />
         </CartProvider>
       </body>
     </html>

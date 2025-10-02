@@ -8,7 +8,7 @@ import { CartDrawer } from './cart-drawer';
 
 export function CartButton() {
   const { itemCount } = useCartData();
-  const { cart, isOpen, openCart, closeCart, updateQuantity, removeItem } =
+  const { cart, isOpen, openCart, closeCart, updateQuantity } =
     useCartActions();
 
   return (
@@ -35,7 +35,6 @@ export function CartButton() {
         onClose={closeCart}
         cart={cart}
         onUpdateQuantity={updateQuantity}
-        onRemoveItem={removeItem}
       />
     </>
   );

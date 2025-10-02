@@ -12,7 +12,6 @@ interface CartItemProps {
   price: number;
   quantity: number;
   onUpdateQuantity: (productId: string, newQuantity: number) => void;
-  onRemove: (productId: string) => void;
 }
 
 export function CartItem({
@@ -22,7 +21,6 @@ export function CartItem({
   price,
   quantity,
   onUpdateQuantity,
-  onRemove,
 }: CartItemProps) {
   return (
     <div className="bg-white rounded-lg p-4 border border-gray-200 hover:border-gray-300 transition-colors">
@@ -42,37 +40,29 @@ export function CartItem({
           </p>
 
           {/* Controles de quantidade */}
-          <div className="flex items-center justify-between">
-            <div className="flex items-center gap-2">
-              <Button
-                variant="ghost"
-                size="icon"
-                className="h-7 w-7"
-                onClick={() => onUpdateQuantity(productId, quantity - 1)}
-                disabled={quantity <= 1}
-              >
-                <Minus className="h-3 w-3" />
-              </Button>
-              <span className="text-sm font-medium w-6 text-center">
-                {quantity}
-              </span>
-              <Button
-                variant="ghost"
-                size="icon"
-                className="h-7 w-7"
-                onClick={() => onUpdateQuantity(productId, quantity + 1)}
-              >
-                <Plus className="h-3 w-3" />
-              </Button>
-            </div>
-
+          <div className="flex items-center gap-2">
             <Button
               variant="ghost"
               size="icon"
-              className="h-7 w-7 text-red-600 hover:text-red-700 hover:bg-red-50"
-              onClick={() => onRemove(productId)}
+              className="h-7 w-7"
+              onClick={() => onUpdateQuantity(productId, quantity - 1)}
             >
-              <Trash2 className="h-3 w-3" />
+              {quantity === 1 ? (
+                <Trash2 className="h-3 w-3 text-red-600" />
+              ) : (
+                <Minus className="h-3 w-3" />
+              )}
+            </Button>
+            <span className="text-sm font-medium w-6 text-center">
+              {quantity}
+            </span>
+            <Button
+              variant="ghost"
+              size="icon"
+              className="h-7 w-7"
+              onClick={() => onUpdateQuantity(productId, quantity + 1)}
+            >
+              <Plus className="h-3 w-3" />
             </Button>
           </div>
         </div>
