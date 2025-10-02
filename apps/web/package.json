@@ -20,8 +20,10 @@
     "postcss": "^8.5.6",
     "react": "^19.1.0",
     "react-dom": "^19.1.0",
+    "sonner": "^2.0.7",
     "tailwind-merge": "^3.3.1",
-    "tailwindcss": "^4.1.14"
+    "tailwindcss": "^4.1.14",
+    "uuid": "^13.0.0"
   },
   "devDependencies": {
     "@repo/eslint-config": "*",
@@ -29,6 +31,7 @@
     "@types/node": "^22.15.3",
     "@types/react": "19.1.0",
     "@types/react-dom": "19.1.1",
+    "@types/uuid": "^10.0.0",
     "autoprefixer": "^10.4.20",
     "eslint": "^9.31.0",
     "postcss": "^8.4.49",
