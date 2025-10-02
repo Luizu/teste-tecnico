@@ -25,6 +25,7 @@ export class PrismaCartsRepository implements CartsRepository {
     return new Cart({
       id: record.id,
       sessionId: record.sessionId,
+      items: record.items,
       createdAt: record.createdAt,
       updatedAt: record.updatedAt,
     });
@@ -45,6 +46,7 @@ export class PrismaCartsRepository implements CartsRepository {
     return new Cart({
       id: record.id,
       sessionId: record.sessionId,
+      items: record?.items ?? [],
       createdAt: record.createdAt,
       updatedAt: record.updatedAt,
     });
