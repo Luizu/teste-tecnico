@@ -1,6 +1,7 @@
 'use client';
 
-import { addToCart } from '@/services/cart.service';
+import { useCart } from '@/contexts/cart-context';
+import { addToCart, getCartWithProducts } from '@/services/cart.service';
 import { Product } from '@/types/product';
 import { Button } from '@/ui/components/button';
 import { Card } from '@/ui/components/card';
@@ -16,6 +17,7 @@ interface ProductCardProps {
 
 export const ProductCard = ({ product }: ProductCardProps) => {
   const [isLoading, setIsLoading] = useState(false);
+  const { setCart } = useCart();
 
   const handleAddToCart = async (e: React.MouseEvent) => {
     e.preventDefault();
@@ -27,6 +29,10 @@ export const ProductCard = ({ product }: ProductCardProps) => {
       toast.success('Produto adicionado ao carrinho!', {
         description: product.name,
       });
+
+      // Atualizar o contexto do carrinho
+      const updatedCart = await getCartWithProducts();
+      setCart(updatedCart);
     } catch (error) {
       console.error('Erro ao adicionar ao carrinho:', error);
       toast.error('Erro ao adicionar produto ao carrinho');
