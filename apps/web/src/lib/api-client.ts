@@ -29,8 +29,6 @@ class ApiClient {
    * Método privado para construir URL com query params
    */
   private buildURL(endpoint: string, params?: Record<string, string>): string {
-    console.log(this.baseURL);
-
     const url = new URL(`${this.prefix}/${endpoint}`, this.baseURL);
 
     if (params) {
@@ -52,7 +50,6 @@ class ApiClient {
     const { params, headers, ...restConfig } = config || {};
 
     const url = this.buildURL(endpoint, params);
-    console.log('[API Client] Request URL:', url);
 
     const response = await fetch(url, {
       ...restConfig,
