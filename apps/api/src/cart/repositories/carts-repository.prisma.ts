@@ -35,8 +35,6 @@ export class PrismaCartsRepository implements CartsRepository {
     const record = await this.prisma.cart.findFirst({
       where: criteria.where,
       include: criteria.relations,
-      skip: criteria.skip,
-      take: criteria.take,
     });
 
     if (!record) {

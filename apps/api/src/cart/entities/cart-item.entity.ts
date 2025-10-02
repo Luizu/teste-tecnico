@@ -1,7 +1,10 @@
+import { Product, ProductProps } from 'src/product/entities';
+
 export type CartItemProps = {
   id: string;
   cartId: string;
   productId: string;
+  product?: ProductProps;
   quantity: number;
   createdAt: Date;
   updatedAt: Date;
@@ -11,6 +14,7 @@ export class CartItem {
   readonly #id: string;
   readonly #cartId: string;
   readonly #productId: string;
+  readonly #product?: Product;
   readonly #quantity: number;
   readonly #createdAt: Date;
   readonly #updatedAt: Date;
@@ -19,6 +23,7 @@ export class CartItem {
     this.#id = props.id;
     this.#cartId = props.cartId;
     this.#productId = props.productId;
+    this.#product = props.product ? new Product(props.product) : undefined;
     this.#quantity = props.quantity;
     this.#createdAt = props.createdAt;
     this.#updatedAt = props.updatedAt;
@@ -34,6 +39,10 @@ export class CartItem {
 
   get productId(): string {
     return this.#productId;
+  }
+
+  get product(): Product | undefined {
+    return this.#product;
   }
 
   get quantity(): number {
